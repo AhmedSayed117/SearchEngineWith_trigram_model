@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.http import HttpResponse as Response
@@ -17,35 +19,21 @@ def ReadData():  # Read From File
     return data
 
 
+def cleaningData(data):
+    data = re.sub('[^A-Za-z0-9\s]+', '', data)
+    sentences = data.split('\n')
+
+    sentences = [s.strip() for s in sentences]
+    sentences = [s for s in sentences if len(s) > 0]
+    return sentences
+
+
 def preprocessing(data):
     tokens = []
     finalTokens = []
 
-    # preprocessing Data
-    sentences = data.split('\n')
-    sentences = [s.replace('"', ' ') for s in sentences]
-    sentences = [s.replace('*', ' ') for s in sentences]
-    sentences = [s.replace('%', ' ') for s in sentences]
-    sentences = [s.replace('-', ' ') for s in sentences]
-    sentences = [s.replace('+', ' ') for s in sentences]
-    sentences = [s.replace(':', ' ') for s in sentences]
-    sentences = [s.replace('.', ' ') for s in sentences]
-    sentences = [s.replace('?', ' ') for s in sentences]
-    sentences = [s.replace('[', ' ') for s in sentences]
-    sentences = [s.replace('|', ' ') for s in sentences]
-    sentences = [s.replace('--', ' ') for s in sentences]
-    sentences = [s.replace('-', ' ') for s in sentences]
-    sentences = [s.replace('‘', ' ') for s in sentences]
-    sentences = [s.replace('’', ' ') for s in sentences]
-    sentences = [s.replace('!', ' ') for s in sentences]
-    sentences = [s.replace('/', ' ') for s in sentences]
-    sentences = [s.replace('\\', ' ') for s in sentences]
-    sentences = [s.replace(']', ' ') for s in sentences]
-    sentences = [s.replace('(', ' ') for s in sentences]
-    sentences = [s.replace(')', ' ') for s in sentences]
-    sentences = [s.replace('&', ' ') for s in sentences]
-    sentences = [s.strip() for s in sentences]
-    sentences = [s for s in sentences if len(s) > 0]
+    # cleaning Data
+    sentences = cleaningData(data)
 
     for sentence in sentences:
         sentence = sentence.lower()
@@ -55,6 +43,7 @@ def preprocessing(data):
     for words in tokens:
         for word in words:
             finalTokens.append(word)
+    # print(finalTokens)
     return finalTokens  # [,,,,,]
 
 
