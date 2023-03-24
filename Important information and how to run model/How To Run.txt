@@ -1,0 +1,9 @@
+1- open project by pycharm
+2- open terminal and execute following
+	- cd .\venv\
+	- cd .\Scripts\
+	- .activate
+	- cd ..
+	- cd ..
+	- py .\manage.py runserver
+3- enjoy search engine!
